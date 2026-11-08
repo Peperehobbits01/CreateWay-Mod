@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "priority": 1100,
+  "plugin": "com.peperehobbits01.createwaymod.mixins.MoreBabiesMixinPlugin",
+  "package": "com.peperehobbits01.createwaymod.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "EnrichingCampfireBlockMixin",
+    "EnderEyeItemMixin",
+    "MoreBabiesOceanMonumentPieceMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

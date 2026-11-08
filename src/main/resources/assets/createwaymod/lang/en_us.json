@@ -1,0 +1,23 @@
+{
+  "screen.createwaymod.vote.button": "Vote",
+  "screen.createwaymod.vote.title": "Ender Dragon Fight Vote",
+  "screen.createwaymod.vote.instructions": "Select dates at least 7 days away (up to 64 per ballot)",
+  "screen.createwaymod.vote.submit": "Vote",
+  "screen.createwaymod.vote.selected_dates": "Selected dates: %s/%s",
+  "screen.createwaymod.vote.weekday.0": "Mo",
+  "screen.createwaymod.vote.weekday.1": "Tu",
+  "screen.createwaymod.vote.weekday.2": "We",
+  "screen.createwaymod.vote.weekday.3": "Th",
+  "screen.createwaymod.vote.weekday.4": "Fr",
+  "screen.createwaymod.vote.weekday.5": "Sa",
+  "screen.createwaymod.vote.weekday.6": "Su",
+  "message.createwaymod.vote.accepted": "%s vote(s) registered; you already voted for %s date(s).",
+  "message.createwaymod.vote.closed": "Voting is closed.",
+  "message.createwaymod.vote.invalid_dates": "Choose between 1 and %s valid dates at least 7 days from today.",
+  "message.createwaymod.vote.unavailable": "Voting is currently unavailable.",
+  "message.createwaymod.vote.finished": "The Ender Dragon fight vote is over! Date: %s",
+  "command.createwaymod.vote.reopened": "Voting has been reopened. The previous result and votes were cleared.",
+  "command.createwaymod.vote.not_closed": "Voting is not currently closed.",
+  "command.createwaymod.vote.set_hour": "End opening hour set to %s.",
+  "command.createwaymod.vote.set_hour_failed": "Could not set the End opening hour. Voting must be complete and the time must use HH:mm."
+}

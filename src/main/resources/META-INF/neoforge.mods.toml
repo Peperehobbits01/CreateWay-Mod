@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="MIT"
+
+[[mods]]
+modId="createwaymod"
+version="1.0.0"
+displayName="CreateWay Mod"
+authors="Peperehobbits01 Studio"
+description="A mod to help with content in the CreateWay Modpack."
+
+[[mixins]]
+config="createwaymod.mixins.json"
+
+[[dependencies]]
+modid="neoforge"
+type="required"
+versionRange="[21.1.265,)"
+order="first"
+side="both"

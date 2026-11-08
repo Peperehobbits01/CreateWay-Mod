@@ -26,3 +26,8 @@ replay_pid*
 # IDE Files
 .idea
 .vscode
+
+# Minecraft/gradle files
+.gradle
+build
+run
