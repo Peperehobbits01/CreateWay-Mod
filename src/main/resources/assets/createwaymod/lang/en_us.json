@@ -1,7 +1,8 @@
 {
   "screen.createwaymod.vote.button": "Vote",
   "screen.createwaymod.vote.title": "Ender Dragon Fight Vote",
-  "screen.createwaymod.vote.instructions": "Select dates at least 7 days away (up to 64 per ballot)",
+  "screen.createwaymod.vote.instructions": "Select dates 7 days to 2 months from today (up to 5)",
+  "screen.createwaymod.vote.tooltip": "Vote to open The End",
   "screen.createwaymod.vote.submit": "Vote",
   "screen.createwaymod.vote.selected_dates": "Selected dates: %s/%s",
   "screen.createwaymod.vote.weekday.0": "Mo",
@@ -19,5 +20,7 @@
   "command.createwaymod.vote.reopened": "Voting has been reopened. The previous result and votes were cleared.",
   "command.createwaymod.vote.not_closed": "Voting is not currently closed.",
   "command.createwaymod.vote.set_hour": "End opening hour set to %s.",
-  "command.createwaymod.vote.set_hour_failed": "Could not set the End opening hour. Voting must be complete and the time must use HH:mm."
+  "command.createwaymod.vote.set_hour_failed": "Could not set the End opening hour. Voting must be complete and the time must use HH:mm.",
+  "title.createwaymod.end.opening": "The End opens soon",
+  "title.createwaymod.end.opening_details": "%s at %s"
 }

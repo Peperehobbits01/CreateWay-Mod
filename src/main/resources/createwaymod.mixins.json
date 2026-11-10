@@ -5,6 +5,7 @@
   "package": "com.peperehobbits01.createwaymod.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "DefaultGameRulesMixin",
     "EnrichingCampfireBlockMixin",
     "EnderEyeItemMixin",
     "MoreBabiesOceanMonumentPieceMixin"

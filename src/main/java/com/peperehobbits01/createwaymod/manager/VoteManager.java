@@ -1,5 +1,6 @@
 package com.peperehobbits01.createwaymod.manager;
 
+import com.peperehobbits01.createwaymod.config.CreateWayConfig;
 import com.peperehobbits01.createwaymod.data.VoteData;
 import net.minecraft.server.level.ServerLevel;
 
@@ -19,7 +20,7 @@ public class VoteManager {
     private static final String DATA_ID = "createway_vote_data";
     private static final DateTimeFormatter HOUR_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
     private static final int MIN_VOTES_TO_FINISH = 4;
-    public static final int MAX_DATES_PER_BALLOT = 64;
+    public static final int MAX_DATES_PER_BALLOT = 5;
 
     private final ServerLevel level;
 
@@ -46,6 +47,9 @@ public class VoteManager {
 
 
     public VoteBatchResult castVotes(UUID uuid, List<String> dates) {
+        if (!CreateWayConfig.isVoteSystemEnabled()) {
+            return new VoteBatchResult(VoteStatus.UNAVAILABLE, 0, 0);
+        }
         VoteData data = getData();
         if (data == null) return new VoteBatchResult(VoteStatus.UNAVAILABLE, 0, 0);
         if (data.isVoteFinished) return new VoteBatchResult(VoteStatus.CLOSED, 0, 0);
@@ -54,7 +58,8 @@ public class VoteManager {
         }
 
         Set<String> uniqueDates = new LinkedHashSet<>(dates);
-        if (uniqueDates.size() != dates.size() || uniqueDates.stream().anyMatch(date -> !isAtLeastOneWeekAway(date))) {
+        if (uniqueDates.size() != dates.size()
+            || uniqueDates.stream().anyMatch(date -> !isWithinVotingWindow(date))) {
             return new VoteBatchResult(VoteStatus.INVALID_DATES, 0, 0);
         }
 
@@ -79,6 +84,9 @@ public class VoteManager {
 
 
     public boolean setHour(String hour) {
+        if (!CreateWayConfig.isVoteSystemEnabled()) {
+            return false;
+        }
         try {
             LocalTime.parse(hour, HOUR_FORMAT);
         } catch (DateTimeParseException e) {
@@ -92,6 +100,9 @@ public class VoteManager {
     }
 
     public ReopenResult reopenVotes() {
+        if (!CreateWayConfig.isVoteSystemEnabled()) {
+            return ReopenResult.UNAVAILABLE;
+        }
         VoteData data = getData();
         if (data == null) return ReopenResult.UNAVAILABLE;
         if (!data.isVoteFinished) return ReopenResult.NOT_CLOSED;
@@ -122,7 +133,7 @@ public class VoteManager {
             
             long requiredVotes = Math.max(MIN_VOTES_TO_FINISH, (long) Math.ceil(activePlayers * 0.75));
             if (voters.size() >= requiredVotes) {
-                if (isAtLeastOneWeekAway(date)) {
+                if (isWithinVotingWindow(date)) {
                     data.selectedDate = date;
                     data.isVoteFinished = true;
                     break;
@@ -131,14 +142,15 @@ public class VoteManager {
         }
     }
 
-    private boolean isAtLeastOneWeekAway(String date) {
+    private boolean isWithinVotingWindow(String date) {
         if (date == null) {
             return false;
         }
         try {
             LocalDate voteDate = LocalDate.parse(date);
-            LocalDate minDate = LocalDate.now().plusDays(7);
-            return !voteDate.isBefore(minDate);
+            LocalDate today = LocalDate.now();
+            return !voteDate.isBefore(today.plusDays(7))
+                && !voteDate.isAfter(today.plusMonths(2));
         } catch (DateTimeParseException e) {
             return false;
         }

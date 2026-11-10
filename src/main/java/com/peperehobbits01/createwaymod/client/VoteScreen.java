@@ -1,5 +1,6 @@
 package com.peperehobbits01.createwaymod.client;
 
+import com.peperehobbits01.createwaymod.config.CreateWayConfig;
 import com.peperehobbits01.createwaymod.network.CastVotePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,9 +28,10 @@ public class VoteScreen extends Screen {
     private final List<Button> dayButtons = new ArrayList<>(CALENDAR_COLUMNS * CALENDAR_ROWS);
     private final Set<LocalDate> selectedDates = new TreeSet<>();
     private LocalDate minimumDate;
-    private LocalDate selectedDate;
+    private LocalDate maximumDate;
     private YearMonth displayedMonth;
     private Button previousMonthButton;
+    private Button nextMonthButton;
     private Button submitButton;
 
     public VoteScreen(Screen parentScreen) {
@@ -39,7 +41,7 @@ public class VoteScreen extends Screen {
 
     public static void open() {
         Minecraft minecraft = Minecraft.getInstance();
-        if (!isSingleplayer()) {
+        if (!isSingleplayer() && CreateWayConfig.isVoteSystemEnabled()) {
             minecraft.setScreen(new VoteScreen(minecraft.screen));
         }
     }
@@ -51,6 +53,7 @@ public class VoteScreen extends Screen {
     @Override
     protected void init() {
         minimumDate = LocalDate.now().plusDays(7);
+        maximumDate = LocalDate.now().plusMonths(2);
         displayedMonth = YearMonth.from(minimumDate);
         dayButtons.clear();
 
@@ -64,7 +67,7 @@ public class VoteScreen extends Screen {
             refreshCalendar();
         }).bounds(left, headerY, 30, 20).build());
 
-        addRenderableWidget(Button.builder(Component.literal(">"), button -> {
+        nextMonthButton = addRenderableWidget(Button.builder(Component.literal(">"), button -> {
             displayedMonth = displayedMonth.plusMonths(1);
             refreshCalendar();
         }).bounds(left + calendarWidth - 30, headerY, 30, 20).build());
@@ -107,6 +110,7 @@ public class VoteScreen extends Screen {
 
     private void refreshCalendar() {
         previousMonthButton.active = displayedMonth.isAfter(YearMonth.from(minimumDate));
+        nextMonthButton.active = displayedMonth.isBefore(YearMonth.from(maximumDate));
         submitButton.active = !selectedDates.isEmpty();
 
         LocalDate firstDay = displayedMonth.atDay(1);
@@ -116,9 +120,10 @@ public class VoteScreen extends Screen {
             Button button = dayButtons.get(index);
             boolean inMonth = YearMonth.from(date).equals(displayedMonth);
             boolean selected = selectedDates.contains(date);
-            boolean selectable = inMonth && !date.isBefore(minimumDate)
+            boolean inRange = !date.isBefore(minimumDate) && !date.isAfter(maximumDate);
+            boolean selectable = inMonth && inRange
                 && (selected || selectedDates.size() < CastVotePayload.MAX_DATES);
-            button.visible = inMonth;
+            button.visible = inMonth && !date.isAfter(maximumDate);
             button.active = selectable;
             if (inMonth) {
                 String day = Integer.toString(date.getDayOfMonth());

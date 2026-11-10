@@ -1,7 +1,8 @@
 {
   "screen.createwaymod.vote.button": "Voter",
   "screen.createwaymod.vote.title": "Vote pour le combat contre le dragon de l'End",
-  "screen.createwaymod.vote.instructions": "Sélectionnez des dates à au moins 7 jours (64 max par bulletin)",
+  "screen.createwaymod.vote.instructions": "Sélectionnez des dates entre 7 jours et 2 mois (5 maximum)",
+  "screen.createwaymod.vote.tooltip": "Voter pour ouvrir l'End",
   "screen.createwaymod.vote.submit": "Voter",
   "screen.createwaymod.vote.selected_dates": "Dates sélectionnées : %s/%s",
   "screen.createwaymod.vote.weekday.0": "Lun",
@@ -19,5 +20,7 @@
   "command.createwaymod.vote.reopened": "Le vote a été rouvert. Le résultat et les votes précédents ont été effacés.",
   "command.createwaymod.vote.not_closed": "Le vote n'est pas clos.",
   "command.createwaymod.vote.set_hour": "L'heure d'ouverture de l'End a été définie sur %s.",
-  "command.createwaymod.vote.set_hour_failed": "Impossible de définir l'heure d'ouverture de l'End. Le vote doit être terminé et l'heure doit respecter le format HH:mm."
+  "command.createwaymod.vote.set_hour_failed": "Impossible de définir l'heure d'ouverture de l'End. Le vote doit être terminé et l'heure doit respecter le format HH:mm.",
+  "title.createwaymod.end.opening": "L'End ouvre bientôt",
+  "title.createwaymod.end.opening_details": "Le %s à %s"
 }
