@@ -2,6 +2,7 @@ package com.peperehobbits01.createwaymod.client;
 
 import com.peperehobbits01.createwaymod.config.CreateWayConfig;
 import com.peperehobbits01.createwaymod.network.CastVotePayload;
+import com.peperehobbits01.createwaymod.network.RequestVoteScreenPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -23,6 +24,7 @@ public class VoteScreen extends Screen {
     private static final int CALENDAR_ROWS = 6;
     private static final int CELL_WIDTH = 32;
     private static final int CELL_HEIGHT = 18;
+    private static Screen pendingParentScreen;
 
     private final Screen parentScreen;
     private final List<Button> dayButtons = new ArrayList<>(CALENDAR_COLUMNS * CALENDAR_ROWS);
@@ -41,9 +43,27 @@ public class VoteScreen extends Screen {
 
     public static void open() {
         Minecraft minecraft = Minecraft.getInstance();
-        if (!isSingleplayer() && CreateWayConfig.isVoteSystemEnabled()) {
-            minecraft.setScreen(new VoteScreen(minecraft.screen));
+        if (!isSingleplayer() && CreateWayConfig.isVoteSystemEnabled()
+            && VoteClientPayloads.isVotingOpen()) {
+            pendingParentScreen = minecraft.screen;
+            PacketDistributor.sendToServer(new RequestVoteScreenPayload());
         }
+    }
+
+    public static void openAfterAccessCheck() {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen == pendingParentScreen && pendingParentScreen != null) {
+            minecraft.setScreen(new VoteScreen(pendingParentScreen));
+        }
+        pendingParentScreen = null;
+    }
+
+    public static void onVotingClosed() {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen instanceof VoteScreen voteScreen) {
+            minecraft.setScreen(voteScreen.parentScreen);
+        }
+        pendingParentScreen = null;
     }
 
     public static boolean isSingleplayer() {

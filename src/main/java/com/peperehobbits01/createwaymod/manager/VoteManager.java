@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -18,7 +19,8 @@ import java.util.UUID;
 
 public class VoteManager {
     private static final String DATA_ID = "createway_vote_data";
-    private static final DateTimeFormatter HOUR_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter HOUR_FORMAT =
+        DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
     private static final int MIN_VOTES_TO_FINISH = 4;
     public static final int MAX_DATES_PER_BALLOT = 5;
 
@@ -95,6 +97,25 @@ public class VoteManager {
         VoteData data = getData();
         if (data == null || data.selectedDate == null || !data.isVoteFinished) return false;
         data.selectedHour = hour;
+        data.openingAnnouncementSent = false;
+        data.setDirty();
+        return true;
+    }
+
+    public boolean completeVoteForDebug() {
+        if (!CreateWayConfig.isVoteSystemEnabled()) {
+            return false;
+        }
+        VoteData data = getData();
+        if (data == null) {
+            return false;
+        }
+
+        data.votes.clear();
+        data.selectedDate = LocalDate.now().toString();
+        data.selectedHour = null;
+        data.isVoteFinished = true;
+        data.openingAnnouncementSent = false;
         data.setDirty();
         return true;
     }
@@ -111,6 +132,7 @@ public class VoteManager {
         data.selectedDate = null;
         data.selectedHour = null;
         data.isVoteFinished = false;
+        data.openingAnnouncementSent = false;
         data.setDirty();
         return ReopenResult.REOPENED;
     }
@@ -135,7 +157,9 @@ public class VoteManager {
             if (voters.size() >= requiredVotes) {
                 if (isWithinVotingWindow(date)) {
                     data.selectedDate = date;
+                    data.selectedHour = null;
                     data.isVoteFinished = true;
+                    data.openingAnnouncementSent = false;
                     break;
                 }
             }

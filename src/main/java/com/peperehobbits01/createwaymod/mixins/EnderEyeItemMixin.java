@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EndPortalFrameBlock;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,6 +33,12 @@ public class EnderEyeItemMixin {
             && context.getLevel().getBlockState(context.getClickedPos()).is(Blocks.END_PORTAL_FRAME)
             && !context.getLevel().getBlockState(context.getClickedPos()).getValue(EndPortalFrameBlock.HAS_EYE)
             && !TimeUtils.isEndOpen(serverLevel)) {
+            if (context.getPlayer() != null) {
+                context.getPlayer().displayClientMessage(
+                    Component.translatable("message.createwaymod.end.vote_not_done"),
+                    true
+                );
+            }
             cir.setReturnValue(InteractionResult.FAIL);
         }
     }

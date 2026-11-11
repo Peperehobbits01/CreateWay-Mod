@@ -53,4 +53,5 @@ neoForge {
 dependencies {
     compileOnly 'maven.modrinth:z611fdf7:PQ5wzs3F' // Create Nuclear
     compileOnly 'maven.modrinth:b8kG1VGq:XDz1C9KI' // Aileron
+    runtimeOnly 'maven.modrinth:ZJTGwAND:Xzg42PX9' // End Remastered
 }

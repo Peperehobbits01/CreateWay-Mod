@@ -34,12 +34,23 @@ public class VoteClientEvents {
         Button voteButton = Button.builder(Component.empty(),
                 button -> VoteScreen.open())
             .bounds(x, y, 20, 20)
-            .tooltip(net.minecraft.client.gui.components.Tooltip.create(
-                Component.translatable("screen.createwaymod.vote.tooltip")
-            ))
             .build();
+        updateVoteButton(voteButton, VoteClientPayloads.isVotingOpen());
         event.addListener(voteButton);
         VOTE_BUTTONS.put(screen, voteButton);
+    }
+
+    public static void setVotingOpen(boolean votingOpen) {
+        VOTE_BUTTONS.values().forEach(button -> updateVoteButton(button, votingOpen));
+    }
+
+    private static void updateVoteButton(Button button, boolean votingOpen) {
+        button.active = votingOpen;
+        button.setTooltip(net.minecraft.client.gui.components.Tooltip.create(
+            Component.translatable(votingOpen
+                ? "screen.createwaymod.vote.tooltip"
+                : "screen.createwaymod.vote.closed_tooltip")
+        ));
     }
 
     @SubscribeEvent
@@ -48,6 +59,15 @@ public class VoteClientEvents {
         if (voteButton != null) {
             GuiGraphics graphics = event.getGuiGraphics();
             graphics.renderItem(new ItemStack(Items.ENDER_EYE), voteButton.getX() + 2, voteButton.getY() + 2);
+            if (!voteButton.active) {
+                graphics.fill(
+                    voteButton.getX() + 2,
+                    voteButton.getY() + 2,
+                    voteButton.getX() + 18,
+                    voteButton.getY() + 18,
+                    0x80666666
+                );
+            }
         }
     }
 

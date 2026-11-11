@@ -41,6 +41,7 @@ public record CastVotePayload(List<String> dates) implements CustomPacketPayload
 
             VoteManager.VoteBatchResult result = new VoteManager(player.serverLevel())
                 .castVotes(player.getUUID(), payload.dates());
+            VoteScreenAccessPayload.sendToAll(player.getServer());
             Component message = switch (result.status()) {
                 case ACCEPTED -> Component.translatable(
                     "message.createwaymod.vote.accepted", result.accepted(), result.alreadyVoted()

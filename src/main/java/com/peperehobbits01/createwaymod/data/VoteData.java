@@ -34,6 +34,7 @@ public class VoteData extends SavedData {
     public String selectedDate = null;
     public String selectedHour = null;
     public boolean isVoteFinished = false;
+    public boolean openingAnnouncementSent = false;
 
     public static VoteData load(CompoundTag nbt, HolderLookup.Provider provider) {
         LOGGER.info("VoteData: load method entered");
@@ -65,6 +66,7 @@ public class VoteData extends SavedData {
             if (data.selectedHour == null || data.selectedHour.isEmpty()) data.selectedHour = null;
             
             data.isVoteFinished = nbt.getBoolean("isVoteFinished");
+            data.openingAnnouncementSent = nbt.getBoolean("openingAnnouncementSent");
             
             LOGGER.info("VoteData: load method completed successfully");
             return data;
@@ -91,6 +93,7 @@ public class VoteData extends SavedData {
         nbt.putString("selectedDate", selectedDate == null ? "" : selectedDate);
         nbt.putString("selectedHour", selectedHour == null ? "" : selectedHour);
         nbt.putBoolean("isVoteFinished", isVoteFinished);
+        nbt.putBoolean("openingAnnouncementSent", openingAnnouncementSent);
 
         return nbt;
     }
